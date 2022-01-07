@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/pudongping/gin-blog-service/global"
 	"github.com/pudongping/gin-blog-service/internal/model"
 	"github.com/pudongping/gin-blog-service/internal/routers"
+	"github.com/pudongping/gin-blog-service/pkg/logger"
 	"github.com/pudongping/gin-blog-service/pkg/setting"
 )
 
@@ -25,6 +27,11 @@ func init() {
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+
+	err = setupLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
 	}
 
 }
@@ -81,6 +88,19 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+// setupLogger 初始化日志系统
+func setupLogger() error {
+	fileName := global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  fileName, // 日志文件名
+		MaxSize:   600,      // 设置日志文件所允许的最大占用空间为 600MB
+		MaxAge:    10,       // 日志文件最大生存周期为 10 天
+		LocalTime: true,     // 设置日志文件名的时间格式为本地时间
+	}, "", log.LstdFlags).WithCaller(2)
 
 	return nil
 }
