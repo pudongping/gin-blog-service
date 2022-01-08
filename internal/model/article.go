@@ -1,5 +1,9 @@
 package model
 
+import (
+	"github.com/pudongping/gin-blog-service/pkg/app"
+)
+
 type Article struct {
 	*Model
 	// 文章标题  varchar(100) is_nullable YES
@@ -16,4 +20,9 @@ type Article struct {
 
 func (a Article) TableName() string {
 	return "blog_article"
+}
+
+type ArticleSwagger struct {
+	List  []*Article
+	Pager *app.Pager
 }

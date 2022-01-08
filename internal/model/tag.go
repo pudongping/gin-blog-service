@@ -1,5 +1,9 @@
 package model
 
+import (
+	"github.com/pudongping/gin-blog-service/pkg/app"
+)
+
 type Tag struct {
 	*Model
 	// 标签名称  varchar(100) is_nullable YES
@@ -10,4 +14,9 @@ type Tag struct {
 
 func (t Tag) TableName() string {
 	return "blog_tag"
+}
+
+type TagSwagger struct {
+	List  []*Tag
+	Pager *app.Pager
 }
