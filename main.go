@@ -38,6 +38,8 @@ func init() {
 
 func main() {
 
+	fmt.Printf("App server is running at: http://127.0.0.1:%s \n", global.ServerSetting.HttpPort)
+
 	gin.SetMode(global.ServerSetting.RunMode) // 设置 gin 的运行模式
 
 	router := routers.NewRouter()
@@ -50,6 +52,7 @@ func main() {
 	}
 
 	s.ListenAndServe()
+
 }
 
 // setupSetting 加载配置文件
