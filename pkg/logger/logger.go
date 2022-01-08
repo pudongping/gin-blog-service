@@ -146,7 +146,7 @@ func (l *Logger) JSONFormat(level Level, message string) map[string]interface{} 
 
 // Output 日志输出
 func (l *Logger) Output(level Level, message string) {
-	body, _ := json.Marshal(l.JSONFormat(level, message))
+	body, _ := json.Marshal(l.WithCaller(3).JSONFormat(level, message))
 	content := string(body)
 	switch level {
 	case LevelDebug:

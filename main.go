@@ -103,7 +103,7 @@ func setupLogger() error {
 		MaxSize:   600,      // 设置日志文件所允许的最大占用空间为 600MB
 		MaxAge:    10,       // 日志文件最大生存周期为 10 天
 		LocalTime: true,     // 设置日志文件名的时间格式为本地时间
-	}, "", log.LstdFlags).WithCaller(2)
+	}, "", log.LstdFlags)
 
 	return nil
 }
