@@ -36,6 +36,10 @@ func init() {
 
 }
 
+// @title gin-blog-service 博客系统
+// @version 1.0
+// @description gin-blog-service 学习 gin 写的一个博客系统
+// @termsOfService https://github.com/pudongping/gin-blog-service
 func main() {
 
 	fmt.Printf("App server is running at: http://127.0.0.1:%s \n", global.ServerSetting.HttpPort)
