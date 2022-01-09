@@ -5,15 +5,25 @@ import (
 	"github.com/pudongping/gin-blog-service/pkg/app"
 )
 
-func (d *Dao) CountTag(name string, state uint8) (int64, error) {
-	tag := model.Tag{Name: name, State: state}
-	return tag.Count(d.engine)
+func (d *Dao) GetTag(id uint32, state uint8) (model.Tag, error) {
+	tag := model.Tag{Model: &model.Model{Id: id}, State: state}
+	return tag.Get(d.engine)
 }
 
 func (d *Dao) GetTagList(name string, state uint8, page, pageSize int) ([]*model.Tag, error) {
 	tag := model.Tag{Name: name, State: state}
 	pageOffset := app.GetPageOffset(page, pageSize)
 	return tag.List(d.engine, pageOffset, pageSize)
+}
+
+func (d *Dao) GetTagListByIDs(ids []uint32, state uint8) ([]*model.Tag, error) {
+	tag := model.Tag{State: state}
+	return tag.ListByIDs(d.engine, ids)
+}
+
+func (d *Dao) CountTag(name string, state uint8) (int64, error) {
+	tag := model.Tag{Name: name, State: state}
+	return tag.Count(d.engine)
 }
 
 func (d *Dao) CreateTag(name string, state uint8, createBy string) error {
