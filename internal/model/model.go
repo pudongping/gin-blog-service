@@ -1,12 +1,12 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-
 	// GORM 的 MySQL 数据库驱动导入
 	"gorm.io/driver/mysql"
 
@@ -67,6 +67,9 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 		return nil, err
 	}
 
+	db.Callback().Create().Before("gorm:create").Register("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	db.Callback().Update().Before("gorm:update").Register("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+
 	// 命令行打印数据库请求的信息
 	// *gorm.DB 对象的 DB() 方法，可以直接获取到 database/sql 包里的 *sql.DB 对象
 	sqlDB, _ := db.DB()
@@ -86,4 +89,40 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 // migration 自动迁移
 func migration(db *gorm.DB) {
 	// db.AutoMigrate()
+}
+
+func updateTimeStampForCreateCallback(db *gorm.DB) {
+	if db.Statement.Schema != nil {
+		nowTime := getCurrentTime()
+		_ = SetSchemaFieldValue(db, "CreatedOn", nowTime)
+		_ = SetSchemaFieldValue(db, "ModifiedOn", nowTime)
+	}
+}
+
+func updateTimeStampForUpdateCallback(db *gorm.DB) {
+	if db.Statement.Schema != nil {
+		nowTime := getCurrentTime()
+		db.Statement.SetColumn("ModifiedOn", nowTime)
+		// db.Statement.AddClause(clause.Where{
+		// 	Exprs: []clause.Expression{clause.Eq{Column: "is_del"}},
+		// })
+	}
+}
+
+func SetSchemaFieldValue(db *gorm.DB, fieldName string, value interface{}) error {
+	field := db.Statement.Schema.LookUpField(fieldName) // 查找指定字段是否存在
+	if field == nil {
+		return errors.New(fmt.Sprintf("cant't find the %s field", fieldName))
+	}
+	err := field.Set(db.Statement.ReflectValue, value)
+	if err != nil {
+		fmt.Println("schema field set err:", err)
+		return err
+	}
+
+	return nil
+}
+
+func getCurrentTime() int64 {
+	return time.Now().Unix()
 }
