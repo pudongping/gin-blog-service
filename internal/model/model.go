@@ -14,6 +14,11 @@ import (
 	"github.com/pudongping/gin-blog-service/pkg/setting"
 )
 
+const (
+	STATE_OPEN  = 1
+	STATE_CLOSE = 0
+)
+
 type Model struct {
 	// id  int(10) unsigned is_nullable NO
 	Id uint32 `gorm:"primary_key" json:"id"`
