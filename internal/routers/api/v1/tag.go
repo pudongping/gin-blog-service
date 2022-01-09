@@ -18,8 +18,6 @@ func NewTag() Tag {
 	return Tag{}
 }
 
-func (t Tag) Get(c *gin.Context) {}
-
 // @Summary 获取多个标签
 // @Produce  json
 // @Param name query string false "标签名称" maxlength(100)
