@@ -4,6 +4,7 @@ import (
 	"errors"
 	"mime/multipart"
 	"os"
+	"time"
 
 	"github.com/pudongping/gin-blog-service/global"
 	"github.com/pudongping/gin-blog-service/pkg/upload"
@@ -24,8 +25,9 @@ func (svc *Service) UploadFile(fileType upload.FileType, file multipart.File, fi
 		return nil, errors.New("exceeded maximum file limit")
 	}
 
-	uploadSavePath := upload.GetSavePath()    // 获取文件保存地址
-	if upload.CheckSavePath(uploadSavePath) { // 检查保存目录是否存在
+	timeFolder := time.Now().Format("20060102")               // 增加时间目录
+	uploadSavePath := upload.GetSavePath() + "/" + timeFolder // 获取文件保存地址
+	if upload.CheckSavePath(uploadSavePath) {                 // 检查保存目录是否存在
 		if err := upload.CreateSavePath(uploadSavePath, os.ModePerm); err != nil { // 创建在上传文件时所使用的保存目录
 			return nil, errors.New("failed to create save directory")
 		}
@@ -40,7 +42,7 @@ func (svc *Service) UploadFile(fileType upload.FileType, file multipart.File, fi
 		return nil, err
 	}
 
-	accessUrl := global.AppSetting.UploadServerUrl + "/" + fileName
+	accessUrl := global.AppSetting.UploadServerUrl + "/" + timeFolder + "/" + fileName
 	return &FileInfo{
 		Name:      fileName,
 		AccessUrl: accessUrl,
