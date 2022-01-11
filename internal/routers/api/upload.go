@@ -20,13 +20,13 @@ func NewUpload() Upload {
 // 上传文件
 func (u Upload) UploadFile(c *gin.Context) {
 	response := app.NewResponse(c)
-	file, fileHeader, err := c.Request.FormFile("file")
+	file, fileHeader, err := c.Request.FormFile("file") // 读取入参 file 字段的上传文件信息
 	if err != nil {
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	fileType := convert.StrTo(c.PostForm("type")).MustInt()
+	fileType := convert.StrTo(c.PostForm("type")).MustInt() // 利用入参 type 字段作为所上传文件类型的确认依据
 	if fileHeader == nil || fileType <= 0 {
 		response.ToErrorResponse(errcode.InvalidParams)
 		return
