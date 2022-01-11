@@ -16,7 +16,7 @@ const (
 	TypeTxt
 )
 
-// GetFileName 获取文件名称
+// 获取文件名称
 func GetFileName(name string) string {
 	ext := GetFileExt(name)
 	fileName := strings.TrimSuffix(name, ext) // 原始文件名
@@ -25,7 +25,7 @@ func GetFileName(name string) string {
 	return fileName + ext // 经过 md5 加密处理后的文件名
 }
 
-// GetFileExt 获取文件后缀
+// 获取文件后缀
 func GetFileExt(name string) string {
 	return path.Ext(name)
 }
