@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"io"
 	"io/ioutil"
 	"mime/multipart"
 	"os"
@@ -80,4 +81,34 @@ func CheckMaxSize(t FileType, f multipart.File) bool {
 func CheckPermission(dst string) bool {
 	_, err := os.Stat(dst)
 	return os.IsPermission(err)
+}
+
+// 创建在上传文件时所使用的保存目录
+func CreateSavePath(dst string, perm os.FileMode) error {
+	// 该方法将会以传入的 os.FileMode 权限位去递归创建所需的所有目录结构，
+	// 若涉及的目录均已存在，则不会进行任何操作，直接返回 nil
+	err := os.MkdirAll(dst, perm)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 保存所上传的文件
+func SaveFile(file *multipart.FileHeader, dst string) error {
+	src, err := file.Open() // 打开源地址的文件
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	out, err := os.Create(dst) // 创建目标地址的文件
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, src)
+	return err
 }
