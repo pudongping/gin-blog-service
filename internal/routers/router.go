@@ -1,7 +1,10 @@
 package routers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/pudongping/gin-blog-service/global"
 	"github.com/pudongping/gin-blog-service/internal/routers/api"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -26,7 +29,8 @@ func NewRouter() *gin.Engine {
 	tag := v1.NewTag()
 	upload := api.NewUpload()
 
-	r.POST("/upload/file", upload.UploadFile) // 上传文件接口
+	r.POST("/upload/file", upload.UploadFile)                         // 上传文件接口
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath)) // 设置文件服务去提供静态资源的访问
 
 	apiv1 := r.Group("/api/v1")
 	{
