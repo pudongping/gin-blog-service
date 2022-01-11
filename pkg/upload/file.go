@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/pudongping/gin-blog-service/global"
 	"github.com/pudongping/gin-blog-service/pkg/util"
@@ -23,8 +24,8 @@ const (
 // 获取文件名称
 func GetFileName(name string) string {
 	ext := GetFileExt(name)
-	fileName := strings.TrimSuffix(name, ext) // 原始文件名
-	fileName = util.EncodeMD5(fileName)       // 将文件名进行 md5 加密
+	fileName := strings.TrimSuffix(name, ext)                                       // 原始文件名
+	fileName = util.EncodeMD5(fileName) + "-" + time.Now().Format("20060102150405") // 将文件名进行 md5 加密并拼接当前时间
 
 	return fileName + ext // 经过 md5 加密处理后的文件名
 }
