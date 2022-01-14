@@ -27,8 +27,8 @@ Email:
   To:
     - xxx
 JWT:
-  Secret: eddycjy
-  Issuer: blog-service
+  Secret: alex
+  Issuer: gin-blog-service
   Expire: 7200
 Database: # 数据库配置
   DBType: mysql
