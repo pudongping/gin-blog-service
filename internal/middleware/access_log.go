@@ -18,3 +18,9 @@ func (w AccessLogWriter) Write(p []byte) (int, error) {
 
 	return w.ResponseWriter.Write(p)
 }
+
+func AccessLog() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		
+	}
+}
