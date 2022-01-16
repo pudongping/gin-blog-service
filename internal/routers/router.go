@@ -34,10 +34,11 @@ func NewRouter() *gin.Engine {
 		r.Use(gin.Logger())
 		r.Use(gin.Recovery())
 	} else {
-		r.Use(middleware.AccessLog()) // 访问日志记录
-		r.Use(middleware.Recovery())  // 程序异常处理
+		r.Use(middleware.Recovery()) // 程序异常处理
 	}
 
+	r.Use(middleware.Tracing())   // 链路追踪中间件（应该放到所有的中间件之前）
+	r.Use(middleware.AccessLog()) // 访问日志记录
 	r.Use(middleware.RateLimiter(methodLimiters))
 	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout)) // 接口请求超时设置
 	r.Use(middleware.Translations())                                          // 国际化处理中间件
