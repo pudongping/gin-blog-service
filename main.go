@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pudongping/gin-blog-service/pkg/tracer"
 	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/pudongping/gin-blog-service/global"
@@ -32,6 +33,11 @@ func init() {
 	err = setupLogger()
 	if err != nil {
 		log.Fatalf("init.setupLogger err: %v", err)
+	}
+
+	err = setupTracer()
+	if err != nil {
+		log.Fatalf("init.setupTracer err: %v", err)
 	}
 
 }
@@ -119,5 +125,18 @@ func setupLogger() error {
 		LocalTime: true,     // 设置日志文件名的时间格式为本地时间
 	}, "", log.LstdFlags).WithCaller(2)
 
+	return nil
+}
+
+func setupTracer() error {
+	jaegerTracer, _, err := tracer.NewJaegerTracer(
+		"gin-blog-service",
+		"127.0.0.1:6831",
+	)
+	if err != nil {
+		return err
+	}
+
+	global.Tracer = jaegerTracer
 	return nil
 }
