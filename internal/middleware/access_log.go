@@ -30,21 +30,24 @@ func AccessLog() gin.HandlerFunc {
 		}
 		c.Writer = bodyWriter
 
-		beginTime := time.Now().Unix()
+		beginTime := time.Now()
 		c.Next()
-		endTime := time.Now().Unix()
+		endTime := time.Now()
 
 		fields := logger.Fields{
 			"request":  c.Request.PostForm.Encode(), // 当前的请求参数
 			"response": bodyWriter.body.String(),    // 当前的请求结果响应主体
 		}
 		s := "access log: method: %s, status_code: %d, " +
-			"begin_time: %d, end_time: %d"
+			"begin_time: %d, end_time: %d, begin_time_date: %s, end_time_date: %s, code_execute_time: %s"
 		global.Logger.WithFields(fields).Infof(c, s,
-			c.Request.Method,    // 当前的调用方法
-			bodyWriter.Status(), // 当前的响应结果状态码
-			beginTime,           // 调用方法的开始时间
-			endTime,             // 调用方法的结束时间
+			c.Request.Method,                        // 当前的调用方法
+			bodyWriter.Status(),                     // 当前的响应结果状态码
+			beginTime.Unix(),                               // 调用方法的开始时间
+			endTime.Unix(),                                 // 调用方法的结束时间
+			beginTime.Format("2006-01-02 15:04:05"), // 格式化处理的开始时间
+			endTime.Format("2006-01-02 15:04:05"),   // 格式化处理的结束时间
+			time.Since(beginTime),                   // 代码执行时间
 		)
 
 	}
