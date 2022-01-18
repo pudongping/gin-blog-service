@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,14 +19,20 @@ import (
 )
 
 var (
-	port string
-	runMode string
-	config string
+	port      string
+	runMode   string
+	config    string
+	isVersion bool
 )
 
 func init() {
+	err := setupFlag()
+	if err != nil {
+		log.Fatalf("init.setupFlag err: %v", err)
+	}
+
 	// 初始化加载配置信息
-	err := setupSetting()
+	err = setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
@@ -69,6 +76,16 @@ func main() {
 
 	s.ListenAndServe()
 
+}
+
+func setupFlag() error {
+	flag.StringVar(&port, "port", "", "启动端口")
+	flag.StringVar(&runMode, "mode", "", "启动模式")
+	flag.StringVar(&config, "config", "configs/", "指定要使用的配置文件路径")
+	flag.BoolVar(&isVersion, "version", false, "编译信息")
+	flag.Parse()
+
+	return nil
 }
 
 // setupSetting 加载配置文件
