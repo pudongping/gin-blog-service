@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -90,7 +91,7 @@ func setupFlag() error {
 
 // setupSetting 加载配置文件
 func setupSetting() error {
-	newSetting, err := setting.NewSetting() // 加载配置文件
+	newSetting, err := setting.NewSetting(strings.Split(config, ",")...) // 加载配置文件
 	if err != nil {
 		return err
 	}
@@ -121,6 +122,14 @@ func setupSetting() error {
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
 	global.JWTSetting.Expire *= time.Second
+
+	if port != "" {
+		global.ServerSetting.HttpPort = port
+	}
+	if runMode != "" {
+		global.ServerSetting.RunMode = runMode
+	}
+
 	return nil
 }
 
