@@ -17,6 +17,12 @@ import (
 	"github.com/pudongping/gin-blog-service/pkg/setting"
 )
 
+var (
+	port string
+	runMode string
+	config string
+)
+
 func init() {
 	// 初始化加载配置信息
 	err := setupSetting()
@@ -128,6 +134,7 @@ func setupLogger() error {
 	return nil
 }
 
+// setupTracer 链路追踪
 func setupTracer() error {
 	jaegerTracer, _, err := tracer.NewJaegerTracer(
 		"gin-blog-service",
