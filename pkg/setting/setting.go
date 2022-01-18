@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
 
@@ -25,5 +26,19 @@ func NewSetting(configs ...string) (*Setting, error) {
 		return nil, err
 	}
 
-	return &Setting{vp: vp}, nil
+	// 变更热更新的配置
+	s := &Setting{vp: vp}
+	s.WatchSettingChange()
+
+	return s, nil
+}
+
+// WatchSettingChange 监听文件的热更新
+func (s *Setting) WatchSettingChange() {
+	go func() {
+		s.vp.WatchConfig() // 对文件配置进行监听
+		s.vp.OnConfigChange(func(in fsnotify.Event) {
+			_ = s.ReloadAllSection()
+		})
+	}()
 }
