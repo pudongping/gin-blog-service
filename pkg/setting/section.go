@@ -69,6 +69,7 @@ func (s *Setting) ReadSection(k string, v interface{}) error {
 	return nil
 }
 
+// ReloadAllSection 重新读取配置
 func (s *Setting) ReloadAllSection() error {
 	for k, v := range sections {
 		err := s.ReadSection(k, v)
