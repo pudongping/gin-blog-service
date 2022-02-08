@@ -160,7 +160,7 @@ func setupLogger() error {
 	return nil
 }
 
-// setupTracer 链路追
+// setupTracer 链路追踪
 func setupTracer() error {
 	jaegerTracer, _, err := tracer.NewJaegerTracer(
 		"gin-blog-service",
