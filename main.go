@@ -19,12 +19,7 @@ import (
 	"github.com/pudongping/gin-blog-service/pkg/setting"
 )
 
-var (
-	port      string
-	runMode   string
-	config    string
-	isVersion bool
-)
+
 
 func init() {
 	err := setupFlag()
