@@ -166,9 +166,9 @@ func setupTracer() error {
 		"gin-blog-service",
 		"127.0.0.1:6831",
 	)
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
 	global.Tracer = jaegerTracer
 	return nil
