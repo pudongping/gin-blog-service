@@ -20,10 +20,13 @@ import (
 )
 
 var (
-	port      string
-	runMode   string
-	config    string
-	isVersion bool
+	port         string
+	runMode      string
+	config       string
+	isVersion    bool
+	buildTime    string
+	buildVersion string
+	gitCommitID  string
 )
 
 func init() {
@@ -61,6 +64,14 @@ func init() {
 // @description gin-blog-service 学习 gin 写的一个博客系统
 // @termsOfService https://github.com/pudongping/gin-blog-service
 func main() {
+
+	// 当携带 -version 参数执行二进制文件时，打印版本信息
+	if isVersion {
+		fmt.Printf("build_time: %s\n", buildTime)
+		fmt.Printf("build_version: %s\n", buildVersion)
+		fmt.Printf("git_commit_id: %s\n", gitCommitID)
+		return
+	}
 
 	fmt.Printf("App server is running at: http://127.0.0.1:%s \n", global.ServerSetting.HttpPort)
 
