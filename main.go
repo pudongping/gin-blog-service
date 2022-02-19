@@ -91,9 +91,15 @@ func main() {
 	}
 
 	// 优雅的重启和停止
+	gracefulShutdown(s)
+
+}
+
+func gracefulShutdown(srv *http.Server) {
+	// 优雅的重启和停止
 	// see gin web framework document examples : https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/notify-without-context/server.go
 	go func() {
-		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("s.ListenAndServe err: %v", err)
 		}
 	}()
@@ -101,6 +107,9 @@ func main() {
 	// 等待中断信号
 	quit := make(chan os.Signal)
 	// 接受 syscall.SIGINT 和 syscall.SIGTERM 信号
+	// kill 不加参数发送 syscall.SIGTERM 信号
+	// kill -2 发送 syscall.SIGINT 信号
+	// kill -9 发送 syscall.SIGKILL 信号，但是不能被捕获，因此不需要添加它
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutting down server...")
@@ -108,12 +117,11 @@ func main() {
 	// 最大时间控制，用于通知该服务端它有 5 秒的时间来处理原有的请求
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	if err := s.Shutdown(ctx); err != nil {
+	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 
 	log.Println("Server exiting")
-
 }
 
 func setupFlag() error {
