@@ -36,6 +36,13 @@ func AccessLog() gin.HandlerFunc {
 
 		fields := logger.Fields{
 			"request":  c.Request.PostForm.Encode(), // 当前的请求参数
+			"url": c.Request.URL,
+			"userAgent": c.Request.UserAgent(),
+			"proto": c.Request.Proto,
+			"header": c.Request.Header,
+			"host": c.Request.Host,
+			"remoteAddr": c.Request.RemoteAddr,
+			"requestUri": c.Request.RequestURI,
 			"response": bodyWriter.body.String(),    // 当前的请求结果响应主体
 		}
 		s := "access log: method: %s, status_code: %d, " +
