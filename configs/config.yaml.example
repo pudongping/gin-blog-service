@@ -1,0 +1,44 @@
+Server: # 服务配置
+  RunMode: debug  # 设置 gin 的运行模式
+  HttpPort: 8000  # 默认的 HTTP 监听端口
+  ReadTimeout: 60  # 允许读取的最大持续时间
+  WriteTimeout: 60  # 允许写入的最大持续时间
+App: # 应用配置
+  DefaultPageSize: 10  # 设置默认每页数量
+  MaxPageSize: 100  # 所允许的最大每页数量
+  DefaultContextTimeout: 60
+  LogSavePath: storage/logs  # 默认的应用日志存储路径
+  LogFileName: app
+  LogFileExt: .log
+  UploadSavePath: storage/uploads  # 上传文件的最终保存目录
+  UploadServerUrl: http://127.0.0.1:8000/static  # 上传文件后的用于展示的文件服务地址
+  UploadImageMaxSize: 5  # 上传文件所允许的最大空间大小（MB）
+  UploadImageAllowExts:  # 上传文件所允许的文件后缀
+    - .jpg
+    - .jpeg
+    - .png
+Email:
+  Host: smtp.qq.com
+  Port: 465
+  UserName: xxx
+  Password: xxx
+  IsSSL: true
+  From: xxx
+  To:
+    - xxx
+JWT:
+  Secret: alex
+  Issuer: gin-blog-service
+  Expire: 7200
+Database: # 数据库配置
+  DBType: mysql
+  UserName: root
+  Password: 123456
+  Host: 127.0.0.1:3306
+  DBName: blog_service
+  TablePrefix: blog_
+  Charset: utf8
+  ParseTime: True
+  MaxIdleConns: 10  # 最大空闲连接数
+  MaxOpenConns: 30  # 最大连接数
+  ConnMaxLifetime: 5  # 每个链接的过期时间
