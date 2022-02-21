@@ -62,3 +62,6 @@ CREATE TABLE `blog_auth`
     `is_del`      tinyint(3) unsigned DEFAULT '0' COMMENT '是否删除 0为未删除、1为已删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='认证管理';
+
+-- 插入一条默认授权用户
+INSERT INTO `blog_service`.`blog_auth`(`app_key`, `app_secret`, `created_on`, `created_by`, `modified_on`, `modified_by`, `deleted_on`, `is_del`) VALUES ('test', '123456', 0, '', 0, '', 0, 0);
