@@ -13,8 +13,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pudongping/gin-blog-service/pkg/tracer"
 	"gopkg.in/natefinch/lumberjack.v2"
+
+	"github.com/pudongping/gin-blog-service/pkg/tracer"
 
 	"github.com/pudongping/gin-blog-service/global"
 	"github.com/pudongping/gin-blog-service/internal/model"
