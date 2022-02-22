@@ -21,6 +21,35 @@ cp configs/config.yaml.example configs/config.yaml
 vim configs/config.yaml
 ```
 
+**关于读取配置**
+
+> [go-bindata](https://github.com/go-bindata/go-bindata) 库可以将数据文件转换为 Go 代码。
+> 因此读取配置信息也可以通过 [go-bindata/go-bindata](https://github.com/go-bindata/go-bindata/) 包提供的方式来读取。使用方式如下：
+
+1. 安装 `go-bindata/go-bindata` 包
+
+```shell
+go get -u github.com/go-bindata/go-bindata/...
+```
+
+2. 将配置文件生成 go 代码
+
+```shell
+# 执行这条命令后，会将 `configs/config.yaml` 文件打包，并通过 `-o` 参数选择指定的路径输出到 `configs/config.go` 文件中
+# 再通过 `-pkg` 选项指定生成的包名为 `configs`
+go-bindata -o configs/config.go -pkg-configs configs/config.yaml
+```
+
+3. 读取文件中的配置信息
+
+```go
+data, err := configs.Asset("configs/config.yaml")
+
+if err == nil {
+    fmt.Println(string(data))
+}
+```
+
 - 执行以下命令运行项目
 
 ```shell
