@@ -216,6 +216,6 @@ func setupTracer() error {
 		return err
 	}
 
-	// global.Tracer = jaegerTracer
+	global.Tracer = jaegerTracer
 	return nil
 }
