@@ -193,18 +193,7 @@ func setupDBEngine() error {
 	return nil
 }
 
-// setupLogger 初始化日志系统
-func setupLogger() error {
-	fileName := global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt
-	global.Logger = logger.NewLogger(&lumberjack.Logger{
-		Filename:  fileName, // 日志文件名
-		MaxSize:   600,      // 设置日志文件所允许的最大占用空间为 600MB
-		MaxAge:    10,       // 日志文件最大生存周期为 10 天
-		LocalTime: true,     // 设置日志文件名的时间格式为本地时间
-	}, "", log.LstdFlags).WithCaller(2)
 
-	return nil
-}
 
 // setupTracer 链路追踪
 func setupTracer() error {
