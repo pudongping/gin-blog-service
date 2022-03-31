@@ -9,6 +9,7 @@ import (
 )
 
 func NewJaegerTracer(serviceName, agentHostPort string) (opentracing.Tracer, io.Closer, error) {
+	// 此处为 jaeger client 的配置项
 	cfg := &config.Configuration{
 		ServiceName: serviceName,
 		// 固定采样、对所有数据都进行采样
